@@ -1,11 +1,21 @@
 package minesweeper.src;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Scanner;
 
-class InOut {
-    static void printBoard(Minesweeper ms) {
+/**
+ * Class that handles the interface program human. It consists of input and ouput methods
+ */
+final class InOut {
+    /**
+     * Print the board associated to the minesweeper object given
+     * @param ms minesweeper object
+     */
+    static void printBoard(@NotNull Minesweeper ms) {
         System.out.println(" |123456789|");
         System.out.println("-|---------|");
         int cpt = 1;
@@ -46,7 +56,8 @@ class InOut {
      * @param widthField  width of the field
      * @return [Ycoord, Xcoord, action] with m = mine and free = f
      */
-    static Play inputMove(int heightField, int widthField) {
+    @Contract("_, _ -> new")
+    static @NotNull Play inputMove(int heightField, int widthField) {
         Scanner scanner = new Scanner(System.in);
         final String[] set = {"free", "mine"};
         int Ycoord, Xcoord;
@@ -65,10 +76,9 @@ class InOut {
     }
 
     /**
-     * Print the victory message
+     * Print the endgame message according to victory or defeat
      */
-
-    static void printEndgame(Minesweeper ms) {
+    static void printEndgame(@NotNull Minesweeper ms) {
         if (ms.victory) {
             System.out.println("Congratulations! You found all the mines!");
         } else {

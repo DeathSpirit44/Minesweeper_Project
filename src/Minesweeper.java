@@ -1,9 +1,15 @@
 package minesweeper.src;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.Random;
 
-class Minesweeper {
+/**
+ * Class that represent the state of a minesweeper
+ */
+final class Minesweeper {
     final char[][] field;
     final boolean[][] markedYX;
     final boolean[][] bombsYX;
@@ -16,10 +22,9 @@ class Minesweeper {
     private int nbBombs;
 
     /**
-     * Constructor for the minesweeper object and initiate the values with createField and PlantBombs methods
-     *
+     * Constructor that init all the variable for an empty board
      * @param height height of the board
-     * @param width  width of the board
+     * @param width width of the board
      */
     public Minesweeper(int height, int width) {
         this.height = height;
@@ -54,6 +59,10 @@ class Minesweeper {
         this.nbBombs = nbBombs;
     }
 
+    /**
+     * Fill the board (BombsYX) with bombs (true) according to the user input and ruleset
+     * @param initCoord coordinates of the first input by user
+     */
     void plantBombs(int[] initCoord) {
         Random random = new Random();
         int i = 1;
@@ -67,6 +76,10 @@ class Minesweeper {
         }
     }
 
+    /**
+     * Launch the discovery of the board according to the ruleset at coordinates given by play object
+     * @param play action of the user
+     */
     void discover(Play play) {
         int[] coord = play.YX;
         if (!bombsYX[coord[0]][coord[1]]) {
@@ -77,7 +90,11 @@ class Minesweeper {
         exploredVictory();
     }
 
-    private void discoverRecursive(int[] coord) {
+    /**
+     * recursive function that explores the board according to ruleset
+     * @param coord coordinates to discover
+     */
+    private void discoverRecursive(int @NotNull [] coord) {
         if (field[coord[0]][coord[1]] == '*') { // gere les cas on on supprime des drapeaux avec la discovery
             nbMarked--;
         }
@@ -92,15 +109,17 @@ class Minesweeper {
                     }
                 }
             }
-
         } else {
             field[coord[0]][coord[1]] = Character.forDigit(countBombs(coord), 10);
         }
-
-
     }
 
-    private boolean isAroundEmpty(int[] coord) {
+    /**
+     * @param coord coordinates
+     * @return true is all neighborhood cells do not contains mines
+     */
+    @Contract(pure = true)
+    private boolean isAroundEmpty(int @NotNull [] coord) {
         for (int iHeight = (coord[0] != 0) ? -1 + coord[0] : 0; iHeight <= 1 + coord[0] && iHeight < height; iHeight++) {
             for (int iWidth = (coord[1] != 0) ? -1 + coord[1] : 0; iWidth <= 1 + coord[1] && iWidth < width; iWidth++) {
                 if (bombsYX[iHeight][iWidth]) {
@@ -111,7 +130,12 @@ class Minesweeper {
         return true;
     }
 
-    private int countBombs(int[] coord) {
+    /**
+     * @param coord coordinates of a cell
+     * @return the number of bombs in the neighborhood of the cell
+     */
+    @Contract(pure = true)
+    private int countBombs(int @NotNull [] coord) {
         int sumBombs = 0;
         for (int iHeight = (coord[0] != 0) ? -1 + coord[0] : 0; iHeight <= 1 + coord[0] && iHeight < height; iHeight++) {
             for (int iWidth = (coord[1] != 0) ? -1 + coord[1] : 0; iWidth <= 1 + coord[1] && iWidth < width; iWidth++) {
@@ -123,7 +147,11 @@ class Minesweeper {
         return sumBombs;
     }
 
-    void mark(int[] coord) {
+    /**
+     * marked or unmarked cell
+     * @param coord coordinates of the cell that should be marked or unmarked
+     */
+    void mark(int @NotNull [] coord) {
         final char value = field[coord[0]][coord[1]];
         if (value == '.' || value == '*') {
             field[coord[0]][coord[1]] = (value == '.') ? '*' : '.';
@@ -139,6 +167,10 @@ class Minesweeper {
         }
     }
 
+    /**
+     * check if the user win according to ruleset and modifie this.victory accordingly
+     */
+    @Contract(mutates = "this")
     private void markedVictory() {
         if (nbBombs == nbMarked) {
             if (Arrays.deepEquals(markedYX, bombsYX)) {
@@ -147,12 +179,20 @@ class Minesweeper {
         }
     }
 
+    /**
+     * check if the user win according to ruleset and modifie this.victory accordingly
+     */
+    @Contract(mutates = "this")
     private void exploredVictory() {
         if (nbExplored == height * width - nbBombs) {
             victory = true;
         }
     }
 
+    /**
+     * Launch a method according of the action of the user
+     * @param play action of the user
+     */
     void action(Play play) {
         switch (play.action) {
             case "free" -> discover(play);
