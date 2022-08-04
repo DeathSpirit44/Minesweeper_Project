@@ -1,14 +1,10 @@
 package minesweeper.src;
 
-
-//TODO resoudre les problèmes pour les tests
 public class Main {
     public static void main(String[] args) {
         final int height = 9;
         final int width = 9;
-        //Initialisation du minesweeper (board)
         Minesweeper ms = new Minesweeper(height, width);
-        //Première action et plantages des bombes
         ms.setNbBombs(InOut.intputNbBombs(height, width));
         InOut.printBoard(ms);
         Play init = InOut.inputMove(height, width);
@@ -29,7 +25,3 @@ public class Main {
         InOut.printEndgame(ms);
     }
 }
-
-/**
- * class that handles the interface minesweeper and human
- */

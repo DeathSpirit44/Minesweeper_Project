@@ -7,11 +7,11 @@ class Minesweeper {
     final char[][] field;
     final boolean[][] markedYX;
     final boolean[][] bombsYX;
-    private int nbExplored;
     int height;
     int width;
     boolean defeat = false;
     boolean victory = false;
+    private int nbExplored;
     private int nbMarked;
     private int nbBombs;
 
@@ -54,11 +54,6 @@ class Minesweeper {
         this.nbBombs = nbBombs;
     }
 
-    /**
-     * Plants the nbBombs in the field
-     *
-     * @return return an array containing the coordinates of all the bombs
-     */
     void plantBombs(int[] initCoord) {
         Random random = new Random();
         int i = 1;
@@ -72,10 +67,6 @@ class Minesweeper {
         }
     }
 
-    /**
-     * @param play L'object Play associée à l'action du joueur
-     * @return true si le joueur a perdu et false sinon
-     */
     void discover(Play play) {
         int[] coord = play.YX;
         if (!bombsYX[coord[0]][coord[1]]) {
@@ -83,12 +74,12 @@ class Minesweeper {
         } else {
             defeat = true;
         }
-        markedVictory();
+        exploredVictory();
     }
 
     private void discoverRecursive(int[] coord) {
         if (field[coord[0]][coord[1]] == '*') { // gere les cas on on supprime des drapeaux avec la discovery
-            nbMarked --;
+            nbMarked--;
         }
         field[coord[0]][coord[1]] = '/';
         nbExplored++;
@@ -104,7 +95,6 @@ class Minesweeper {
 
         } else {
             field[coord[0]][coord[1]] = Character.forDigit(countBombs(coord), 10);
-            nbExplored++;
         }
 
 
@@ -138,7 +128,11 @@ class Minesweeper {
         if (value == '.' || value == '*') {
             field[coord[0]][coord[1]] = (value == '.') ? '*' : '.';
             markedYX[coord[0]][coord[1]] = !markedYX[coord[0]][coord[1]];
-            nbMarked = (value == '.') ? ++nbMarked : --nbMarked;
+            if ((value == '.')) {
+                ++nbMarked;
+            } else {
+                --nbMarked;
+            }
             markedVictory();
         } else {
             System.out.println("You can't mark this cell !");
@@ -161,108 +155,8 @@ class Minesweeper {
 
     void action(Play play) {
         switch (play.action) {
-            case "free":
-                discover(play);
-                break;
-            case "mine":
-                mark(play.YX);
-
+            case "free" -> discover(play);
+            case "mine" -> mark(play.YX);
         }
     }
-
-    /**
-     * check if all the mines have been found
-     *
-     * @return true if all the mines have been found
-     */
-//    boolean checkVictory() {
-    // faire deux fontions pour les deux conditions de victoire
-//        if (bombsXY.length == markedXY.size()) {
-//            for (int[] bombsV :
-//                    bombsXY) {
-//                boolean check = false;
-//                for (int[] markedV :
-//                        markedXY) {
-//                    if (Arrays.equals(bombsV, markedV)) {
-//                        check = true;
-//                        break;
-//                    }
-//                }
-//                if (!check) {
-//                    return false;
-//                }
-//            }
-//            if (!(explored == field.length * field[0].length - bombsXY.length))
-//                return false;
-//            return true;
-//    }
-
-    /**
-     * ask the player where he wants to mark / unmark a case
-     */
-
-//    void mark() {
-//        boolean number = true;
-//        while (number) {
-//            Play input = InOut.inputMove(field.length, field[0].length);
-//            int[] coord = {input.getYX()[0] - 1, input.getYX()[1] - 1};
-//            switch (field[coord[0]][coord[1]]) {
-//                case '*':
-//                    field[coord[0]][coord[1]] = '.';
-//                    number = false;
-//                    for (int[] value :
-//                            markedXY) {
-//                        if (Arrays.equals(coord, value)) {
-//                            markedXY.remove(value);
-//                            break;
-//                        }
-//                    }
-//                    break;
-//                case '.':
-//                    field[coord[0]][coord[1]] = '*';
-//                    number = false;
-//                    markedXY.add(coord.clone());
-//                    break;
-//                default:
-//                    System.out.println("This case is not valid");
-//            }
-//
-//        }
-//    }
-
-    /**
-     * fill fill the board with the near bomb number and remove bombs
-     */
-//    void countBombs() {
-//        final int height = field.length;
-//        final int width = field[0].length;
-//        int cptBombs;
-//        for (int i = 0; i < height; i++) {
-//            for (int j = 0; j < width; j++) {
-//                cptBombs = 0;
-//                if (field[i][j] == 'X') {
-//                    continue;
-//                } else {
-//                    for (int k = i - 1; k <= i + 1; k++) {
-//                        for (int l = j - 1; l <= j + 1; l++) {
-//                            if (k < 0 || l < 0 || k > height - 1 || l > height - 1) {
-//                                continue;
-//                            } else {
-//                                if (field[k][l] == 'X') {
-//                                    cptBombs++;
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//                if (cptBombs != 0) {
-//                    field[i][j] = Character.forDigit(cptBombs, 10);
-//                }
-//            }
-//        }
-//        for (int[] coord :
-//                bombsXY) {
-//            field[coord[0]][coord[1]] = '.';
-//        }
-//    }
 }

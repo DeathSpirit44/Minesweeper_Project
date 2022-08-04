@@ -5,11 +5,6 @@ import java.util.Locale;
 import java.util.Scanner;
 
 class InOut {
-    /**
-     * Print the minesweeper field
-     *
-     * @param field 2 dimension array representing the minesweeper field
-     */
     static void printBoard(Minesweeper ms) {
         System.out.println(" |123456789|");
         System.out.println("-|---------|");
@@ -59,16 +54,14 @@ class InOut {
         String stateInput;
         do {
             System.out.println("Set/unset marks or claim a cell as free:");
-            // On inverse les coordonnées pour le test
-            Xcoord = scanner.nextInt();
             Ycoord = scanner.nextInt();
+            Xcoord = scanner.nextInt();
             stateInput = scanner.next().toLowerCase(Locale.ROOT);
             inHeight = Ycoord > 0 && Ycoord <= heightField;
             inWidth = Xcoord > 0 && Xcoord <= widthField;
             inSet = Arrays.asList(set).contains(stateInput);
         } while (!(inHeight && inWidth && inSet));
-        Play result = new Play(Ycoord - 1, Xcoord - 1, stateInput);
-        return result;
+        return new Play(Ycoord - 1, Xcoord - 1, stateInput);
     }
 
     /**
