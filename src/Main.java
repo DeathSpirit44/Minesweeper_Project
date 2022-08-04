@@ -1,4 +1,4 @@
-package minesweeper;
+package minesweeper.src;
 
 
 //TODO resoudre les problèmes pour les tests

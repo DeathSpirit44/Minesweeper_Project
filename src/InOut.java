@@ -1,4 +1,4 @@
-package minesweeper;
+package minesweeper.src;
 
 import java.util.Arrays;
 import java.util.Locale;

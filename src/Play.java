@@ -1,4 +1,4 @@
-package minesweeper;
+package minesweeper.src;
 
 class Play {
     final int[] YX;
