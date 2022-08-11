@@ -1,7 +1,5 @@
 package minesweeper.src;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -94,7 +92,7 @@ final class Minesweeper {
      * recursive function that explores the board according to ruleset
      * @param coord coordinates to discover
      */
-    private void discoverRecursive(int @NotNull [] coord) {
+    private void discoverRecursive(int [] coord) {
         if (field[coord[0]][coord[1]] == '*') { // gere les cas on on supprime des drapeaux avec la discovery
             nbMarked--;
         }
@@ -118,8 +116,7 @@ final class Minesweeper {
      * @param coord coordinates
      * @return true is all neighborhood cells do not contains mines
      */
-    @Contract(pure = true)
-    private boolean isAroundEmpty(int @NotNull [] coord) {
+    private boolean isAroundEmpty(int [] coord) {
         for (int iHeight = (coord[0] != 0) ? -1 + coord[0] : 0; iHeight <= 1 + coord[0] && iHeight < height; iHeight++) {
             for (int iWidth = (coord[1] != 0) ? -1 + coord[1] : 0; iWidth <= 1 + coord[1] && iWidth < width; iWidth++) {
                 if (bombsYX[iHeight][iWidth]) {
@@ -134,8 +131,7 @@ final class Minesweeper {
      * @param coord coordinates of a cell
      * @return the number of bombs in the neighborhood of the cell
      */
-    @Contract(pure = true)
-    private int countBombs(int @NotNull [] coord) {
+    private int countBombs(int [] coord) {
         int sumBombs = 0;
         for (int iHeight = (coord[0] != 0) ? -1 + coord[0] : 0; iHeight <= 1 + coord[0] && iHeight < height; iHeight++) {
             for (int iWidth = (coord[1] != 0) ? -1 + coord[1] : 0; iWidth <= 1 + coord[1] && iWidth < width; iWidth++) {
@@ -151,7 +147,7 @@ final class Minesweeper {
      * marked or unmarked cell
      * @param coord coordinates of the cell that should be marked or unmarked
      */
-    void mark(int @NotNull [] coord) {
+    void mark(int [] coord) {
         final char value = field[coord[0]][coord[1]];
         if (value == '.' || value == '*') {
             field[coord[0]][coord[1]] = (value == '.') ? '*' : '.';
@@ -170,7 +166,6 @@ final class Minesweeper {
     /**
      * check if the user win according to ruleset and modifie this.victory accordingly
      */
-    @Contract(mutates = "this")
     private void markedVictory() {
         if (nbBombs == nbMarked) {
             if (Arrays.deepEquals(markedYX, bombsYX)) {
@@ -182,7 +177,6 @@ final class Minesweeper {
     /**
      * check if the user win according to ruleset and modifie this.victory accordingly
      */
-    @Contract(mutates = "this")
     private void exploredVictory() {
         if (nbExplored == height * width - nbBombs) {
             victory = true;
